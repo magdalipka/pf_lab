@@ -1,3 +1,5 @@
+-- http://users.umiacs.umd.edu/~hal/docs/daume02yaht.pdf
+
 import Data.Char (isAlpha, toLower)
 
 lowerString1 s = map toLower s
@@ -46,8 +48,30 @@ func2j = flip (.) map . (.) . filter
 
 func2z = (. map) . (.) . filter
 
-func3 f l = l ++ map f l
+map2 f = foldr (\ a b -> f a : b) []
+map2a f = foldr (\a b -> f a : b) []
+map2b f = foldr (\a b -> (:) (f a) b) []
+map2c f =  foldr (\a -> (:) (f a)) []
+map2d f = foldr (\a -> ((:) . f) a) []
+map2e f =  foldr ((:) . f) []
 
-func3a f l = (++) l (map f l)
+(++) [] ys = ys
+(++) (x:xs) ys = x : (xs ++ ys)
 
--- func3a f l =
+-- =>
+(++) [] = id
+(++) (x:xs) ys = x : ((++) xs ys)
+(++) (x:xs) ys = (x:) ((++) xs ys)
+(++) (x:xs) ys = ((x:) . (++) xs) ys
+(++) (x:xs) = (x:) . (++) xs
+
+-- albo z foldem
+(++) = foldr (\ a b -> (a:) .b ) id
+==> (++) = foldr (\a b -> (a:) . b) id
+==> (++) = foldr (\a b -> (.) (a:) b) id
+==> (++) = foldr (\a -> (.) (a:)) id
+==> (++) = foldr (\a -> (.) ((:) a)) id
+==> (++) = foldr (\a -> ((.) . (:)) a) id
+==> (++) = foldr ((.) . (:)) id
+
+concat = foldr (++) []
