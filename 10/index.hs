@@ -44,6 +44,8 @@ func2i f = (flip (.) map . (.) . filter) f
 
 func2j = flip (.) map . (.) . filter
 
+func2z = (. map) . (.) . filter
+
 func3 f l = l ++ map f l
 
 func3a f l = (++) l (map f l)
